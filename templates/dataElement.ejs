@@ -53,32 +53,39 @@ if (location.href.indexOf('is-external=true') == -1) {
   <div class="header">
     <div class="subTitle"><%= element.namespace %></div>
     <% if (element.isEntry) { %>
-      <h2 title="Entry Element <%= element.name %>" class="title">Entry Element <%= element.name %></h2>
+      <h2 title="Entry Element <%= element.name %>" class="title"><%= element.name %></h2>
     <% } else { %>
-      <h2 title="Element <%= element.name %>" class="title">Element <%= element.name %></h2>
+      <h2 title="Element <%= element.name %>" class="title"><%= element.name %></h2>
     <% } %>
   </div>
   <div class="contentContainer">
     <div class="description">
       <dl>
-        <dt>Documentation:</dt>
+        <% if (element.namespace == "ecqm.measure") { -%>
+          <dt>Rationale:</dt>
+        <% } else { %>
+          <dt>Documentation:</dt>
+        <% } %>
         <dd>
           <div class="block"><%- makeHtml(element.description) %></div>
         </dd>
       </dl>
       <dl>
         <% if (element.hierarchy) { -%>
-        <dt>Ancestors:</dt>
-        <dd>
-          <ul class="tree">
+        <dt>Base On:
+        <!-- <dd>
+          <ul class="tree"> -->
             <% var finalElement = { path: element.namespacePath, name: element.name };
                var hierarchy = element.hierarchy.slice();
                hierarchy.push(finalElement);
                hierarchy.forEach(function(ancestor, i) { -%>
-              <%- include('inheritanceTree', { ancestor: ancestor, index: i , setClass: false}) -%>
+                <% if (i == hierarchy.length - 2) { -%>
+                  <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= ancestor.name %></a>
+                <% } -%>
             <% }) -%>
-          </ul>
-        </dd>
+          </dt>
+          <!-- </ul>
+        </dd> -->
         <% } -%>
       </dl>
       <% if (element.children.length) { -%>
@@ -123,27 +130,10 @@ if (location.href.indexOf('is-external=true') == -1) {
               <a name="method_summary">
               </a>
               <h3>Field Summary</h3>
-              <%- include('./tables/definedTable', { element: element }) -%>
               <% if (element.overridden !== undefined && element.overridden.length) { -%>
                 <%- include('./tables/overridenTable', { element: element }) -%>
               <% } -%>
-              <% if (element.hierarchy.length > 0) { -%>
-                <ul class="blockList">
-                  <% element.hierarchy.map(h=>h).reverse().forEach(function(ancestor) { -%>
-                    <li class="blockList">
-                      <a name="properties_inherited_from_class_java.lang.Object"></a>
-                      <h3>Properties inherited from&nbsp;
-                        <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= ancestor.name %></a>
-                      </h3>
-                      <% if (ancestor.fields !== undefined && ancestor.fields.length) { -%>
-                        <% ancestor.fields.forEach(function(field, i) { -%>
-                          <code><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></code><% if (i < ancestor.fields.length - 1) { %>,&nbsp;&nbsp;&nbsp;<% } %>
-                        <% }) %>
-                      <% } -%>
-                    </li>
-                  <% }) -%>
-                </ul>
-                <% } -%>
+              <%- include('./tables/definedTable', { element: element }) -%>
             </li>
           </ul>
         </li>

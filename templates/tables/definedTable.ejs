@@ -16,5 +16,11 @@
         <%- include('fieldRow', { field: field, index: index }) -%>
       <% index += 1; } -%>
     <% }) -%>
+    <% var index = 0 %>
+    <% element.fields.forEach(function(field) { -%>
+      <% if (('inheritance' in field)) { -%>
+        <%- include('fieldRow', { field: field, index: index }) -%>
+      <% index += 1; } -%>
+    <% }) -%>
   <% } -%>
 </table>
