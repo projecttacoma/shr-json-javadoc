@@ -63,15 +63,17 @@ if (location.href.indexOf('is-external=true') == -1) {
       <dl>
         <% if (element.namespace == "ecqm.measure") { -%>
           <dt>Rationale:</dt>
+        <% } else if (element.namespace == "qdm.attribute" || element.namespace == "qdm.dataelement") { %>
+          <dt>QDM Definition:</dt>
         <% } else { %>
-          <dt>Documentation:</dt>
+          <dt>Description:</dt>
         <% } %>
         <dd>
           <div class="block"><%- makeHtml(element.description) %></div>
         </dd>
       </dl>
       <dl>
-        <% if (element.hierarchy) { -%>
+        <% if (element.hierarchy && element.namespace != "ecqm.measure") { -%>
         <dt>Base On:
         <!-- <dd>
           <ul class="tree"> -->
@@ -103,11 +105,20 @@ if (location.href.indexOf('is-external=true') == -1) {
       </dl>
       <% } %>
       <% if (element.usedBy.size) { -%>
+        <% var nonUnions = [];
+           var unions = [];
+           element.usedBy.forEach(function(child, i) { -%>
+            <% if (child.path != "ecqm-unions") {
+              nonUnions.push(child)
+            } else  { 
+              unions.push(child)
+            } -%>
+        <% }) -%>
       <dl>
         <dt>Used By:</dt>
         <dd>
           <ul class="class_list">
-            <% var usedBy = Array.from(element.usedBy);
+            <% var usedBy = Array.from(nonUnions);
                usedBy.sort((a, b) => { return a.name.localeCompare(b.name) });
                usedBy.forEach(function(child, i) { -%>
               <li>
@@ -117,6 +128,21 @@ if (location.href.indexOf('is-external=true') == -1) {
           </ul>
         </dd>
       </dl>
+        <% if (unions.length > 0) { -%>
+        <dl>
+          <dt>Included in Unions:</dt>
+          <dd>
+            <ul class="class_list">
+              <% unions.sort((a, b) => { return a.name.localeCompare(b.name) });
+                 unions.forEach(function(child, i) { -%>
+                <li>
+                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < unions.length - 1) { %>,&nbsp;<% } -%>
+                </li>
+              <% }) -%>
+            </ul>
+          </dd>
+        </dl>
+        <% } %>
       <% } %>
     </div>
     <div class="description">
