@@ -12,13 +12,26 @@
   <% } -%>
   <% if (element.fields) { -%>
     <% element.fields.forEach(function(field) { -%>
-      <% if (!('inheritance' in field)) { -%>
+      <% if (!('inheritance' in field) && field.path == 'qdm-attribute' ) { -%>
         <%- include('fieldRow', { field: field, index: index }) -%>
       <% index += 1; } -%>
     <% }) -%>
     <% var index = 0 %>
     <% element.fields.forEach(function(field) { -%>
-      <% if (('inheritance' in field)) { -%>
+      <% if (('inheritance' in field) && field.path == 'qdm-attribute' ) { -%>
+        <%- include('fieldRow', { field: field, index: index }) -%>
+      <% index += 1; } -%>
+    <% }) -%>
+
+
+    <% element.fields.forEach(function(field) { -%>
+      <% if (!('inheritance' in field) && field.path != 'qdm-attribute') { -%>
+        <%- include('fieldRow', { field: field, index: index }) -%>
+      <% index += 1; } -%>
+    <% }) -%>
+    <% var index = 0 %>
+    <% element.fields.forEach(function(field) { -%>
+      <% if (('inheritance' in field) && field.path != 'qdm-attribute') { -%>
         <%- include('fieldRow', { field: field, index: index }) -%>
       <% index += 1; } -%>
     <% }) -%>

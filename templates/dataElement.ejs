@@ -52,10 +52,14 @@ if (location.href.indexOf('is-external=true') == -1) {
   <!-- ======== START OF CLASS DATA ======== -->
   <div class="header">
     <div class="subTitle"><%= element.namespace %></div>
-    <% if (element.isEntry) { %>
-      <h2 title="Entry Element <%= element.name %>" class="title"><%= element.name %></h2>
+    <% if (element.namespace == "ecqm.measure") { -%>
+      <h2 title="Element <%= element.name %>" class="title"><%= element.name %> - <%= element.description.split(".")[0] %></h2>
     <% } else { %>
-      <h2 title="Element <%= element.name %>" class="title"><%= element.name %></h2>
+      <% if (element.isEntry) { %>
+        <h2 title="Entry Element <%= element.name %>" class="title"><%= element.name %></h2>
+      <% } else { %>
+        <h2 title="Element <%= element.name %>" class="title"><%= element.name %></h2>
+      <% } %>
     <% } %>
   </div>
   <div class="contentContainer">
@@ -69,7 +73,26 @@ if (location.href.indexOf('is-external=true') == -1) {
           <dt>Description:</dt>
         <% } %>
         <dd>
+        <% if (element.namespace == "ecqm.dataelement") {
+          var cf_raw = element.description.split("Clinical Focus:")[1] 
+          if (cf_raw != undefined) {
+            var cf = cf_raw.split("),")[0] -%>
+              <div><b>Clinical Focus: </b><%= cf %></div>
+            <% des_raw = element.description.split("Data Element Scope:")[1] 
+              var des = des_raw.split("),")[0] -%>
+              <div><b>Data Element Scope: </b><%= des %></div>
+            <% ic_raw = element.description.split("Inclusion Criteria:")[1] 
+              var ic = ic_raw.split("),")[0] -%>
+              <div><b>Inclusion Criteria: </b><%= ic %></div>
+            <% ec_raw = element.description.split("Exclusion Criteria:")[1] 
+              var ec = ec_raw.split(")")[0] -%>
+              <div><b>Exclusion Criteria: </b><%= ec %></div>
+            <% constaints = element.description.split("-- ")[1] -%>
+              <div><%= constaints %></div>
+          <% } %>
+        <% } else { %>
           <div class="block"><%- makeHtml(element.description) %></div>
+        <% } %>
         </dd>
       </dl>
       <dl>
