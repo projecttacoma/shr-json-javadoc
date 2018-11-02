@@ -89,7 +89,11 @@ if (location.href.indexOf('is-external=true') == -1) {
                hierarchy.push(finalElement);
                hierarchy.forEach(function(ancestor, i) { -%>
                 <% if (i == hierarchy.length - 2) { -%>
+                <% if (ancestor.path == "qdm-dataelement" ) { %> 
+                <dt>QDM Datatype:
+                <% } else { %>
                 <dt>Based On:
+                <% } %>
                   <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= ancestor.name %></a>
                 </dt>
                 <p><%= dataElements[ancestor.fqn].description %></p>
@@ -164,7 +168,11 @@ if (location.href.indexOf('is-external=true') == -1) {
             <li class="blockList">
               <a name="method_summary">
               </a>
-              <h3>Field Summary</h3>
+              <% if (element.namespace == "ecqm.measure") { -%>
+                <h3>Data Elements</h3>
+              <% } else { %> 
+                <h3>QDM Attributes</h3>
+              <% } %>
               <% if (element.overridden !== undefined && element.overridden.length) { -%>
                 <%- include('./tables/overridenTable', { element: element }) -%>
               <% } -%>
