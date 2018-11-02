@@ -24,7 +24,9 @@
   <h2 title="Packages">Packages</h2>
   <ul title="Packages">
   <% namespaces.forEach((namespace) => { -%>
-  <li><a name="<%= namespace.name %>" href="#" onclick="loadPackageFrames('<%= namespace.path %>/<%= namespace.path %>-pkg.html','<%= namespace.path %>/<%= namespace.path %>-info.html')"><%= namespace.name %></a></li>
+    <% if (namespace.name.split(".")[0] != "shr") { %> 
+      <li><a name="<%= namespace.name %>" href="#" onclick="loadPackageFrames('<%= namespace.path %>/<%= namespace.path %>-pkg.html','<%= namespace.path %>/<%= namespace.path %>-info.html')"><%= namespace.name %></a></li>
+    <% } %>
   <% }) -%>
 </ul>
 </div>

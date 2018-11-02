@@ -12,7 +12,9 @@
 <div class="indexContainer">
   <ul>
   <% elements.forEach((element) => { -%>
-  <li><a href="<%= element.namespacePath %>/<%= element.name %>.html" title="class in <%= element.namespacePath %>.<%= element.name %>" target="classFrame"><%= element.name %></a></li>
+    <% if (element.namespacePath.split("-")[0] != "shr") { %> 
+      <li><a href="<%= element.namespacePath %>/<%= element.name %>.html" title="class in <%= element.namespacePath %>.<%= element.name %>" target="classFrame"><%= element.name %></a></li>
+    <% } %>
   <% }) -%>
   </ul>
 </div>
