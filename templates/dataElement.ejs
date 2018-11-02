@@ -73,23 +73,8 @@ if (location.href.indexOf('is-external=true') == -1) {
           <dt>Description:</dt>
         <% } %>
         <dd>
-        <% if (element.namespace == "ecqm.dataelement") {
-          var cf_raw = element.description.split("Clinical Focus:")[1] 
-          if (cf_raw != undefined) {
-            var cf = cf_raw.split("),")[0] -%>
-              <div><b>Clinical Focus: </b><%= cf %></div>
-            <% des_raw = element.description.split("Data Element Scope:")[1] 
-              var des = des_raw.split("),")[0] -%>
-              <div><b>Data Element Scope: </b><%= des %></div>
-            <% ic_raw = element.description.split("Inclusion Criteria:")[1] 
-              var ic = ic_raw.split("),")[0] -%>
-              <div><b>Inclusion Criteria: </b><%= ic %></div>
-            <% ec_raw = element.description.split("Exclusion Criteria:")[1] 
-              var ec = ec_raw.split(")")[0] -%>
-              <div><b>Exclusion Criteria: </b><%= ec %></div>
-            <% constaints = element.description.split("-- ")[1] -%>
-              <div><%= constaints %></div>
-          <% } %>
+        <% if (element.namespace == "ecqm.dataelement") { %>
+          <%- include('./tables/dataElementDescription', { description: element.description }) -%>
         <% } else { %>
           <div class="block"><%- makeHtml(element.description) %></div>
         <% } %>
@@ -97,7 +82,6 @@ if (location.href.indexOf('is-external=true') == -1) {
       </dl>
       <dl>
         <% if (element.hierarchy && element.namespace != "ecqm.measure") { -%>
-        <dt>Based On:
         <!-- <dd>
           <ul class="tree"> -->
             <% var finalElement = { path: element.namespacePath, name: element.name };
@@ -105,10 +89,12 @@ if (location.href.indexOf('is-external=true') == -1) {
                hierarchy.push(finalElement);
                hierarchy.forEach(function(ancestor, i) { -%>
                 <% if (i == hierarchy.length - 2) { -%>
+                <dt>Based On:
                   <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= ancestor.name %></a>
+                </dt>
+                <p><%= dataElements[ancestor.fqn].description %></p>
                 <% } -%>
             <% }) -%>
-          </dt>
           <!-- </ul>
         </dd> -->
         <% } -%>
@@ -182,7 +168,7 @@ if (location.href.indexOf('is-external=true') == -1) {
               <% if (element.overridden !== undefined && element.overridden.length) { -%>
                 <%- include('./tables/overridenTable', { element: element }) -%>
               <% } -%>
-              <%- include('./tables/definedTable', { element: element }) -%>
+              <%- include('./tables/definedTable', { element: element, dataElements: dataElements }) -%>
             </li>
           </ul>
         </li>

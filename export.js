@@ -150,7 +150,8 @@ class SHR {
   buildDataElements() {
     logger.info('Building documentation pages for %s elements...', this.elements.list().length);
     for (const element of this.elements.list()) {
-      const ejsPkg = { element: element, metaData: this.metaData  };
+      var dataElements = this.elements.elements;
+      const ejsPkg = { element: element, dataElements: dataElements, metaData: this.metaData  };
       const fileName = `${element.name}.html`;
       const filePath = path.join(this.outDirectory, element.namespacePath, fileName);
       renderEjsFile('templates/dataElement.ejs', ejsPkg, filePath);

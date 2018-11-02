@@ -11,7 +11,13 @@
       <code><strong><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></strong></code>
     <% } %>
     </div>
-    <div class="block"><%- makeHtml(field.description) %></div>
+    <% if (field.path == 'ecqm-dataelement') { %>
+      <div><%- include('./dataElementDescription', { description: field.description }) -%></div>
+      <% basedOn = dataElements[dataElements[field.fqn].basedOn[0]] %>
+      <div><b><%= basedOn.name %></b> <%= basedOn.description %></div>
+    <% } else { %>
+      <div class="block"><%- makeHtml(field.description) %></div>
+    <% } %>
   </td>
   <td class="colMiddle">
     <% field.pConstraints.forEach(function(constraint) { -%>
