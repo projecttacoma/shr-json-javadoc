@@ -64,7 +64,11 @@
         <tr class="altColor">
       <% } %>
         <td class="colFirst">
-          <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name.replace( /([A-Z])/g, " $1" ) %></a>
+          <% if (element.namespacePath == "ecqm-measure" ) { %>
+            <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name %></a>
+          <% } else { %>
+            <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name.replace( /([A-Z])/g, " $1" ) %></a>
+          <% } %>
         </td>
         <td class="colLast">
           <div class="block"><%- makeHtml(element.description) %></div>
