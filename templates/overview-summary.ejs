@@ -64,7 +64,7 @@
         <tr class="altColor">
       <% } %>
         <td class="colFirst">
-          <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name %></a>
+          <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name.replace( /([A-Z])/g, " $1" ) %></a>
         </td>
         <td class="colLast">
           <div class="block"><%- makeHtml(element.description) %></div>

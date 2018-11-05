@@ -56,9 +56,9 @@ if (location.href.indexOf('is-external=true') == -1) {
       <h2 title="Element <%= element.name %>" class="title"><%= element.name %> - <%= element.description.split(".")[0] %></h2>
     <% } else { %>
       <% if (element.isEntry) { %>
-        <h2 title="Entry Element <%= element.name %>" class="title"><%= element.name %></h2>
+        <h2 title="Entry Element <%= element.name %>" class="title"><%= element.name.replace( /([A-Z])/g, " $1" ) %></h2>
       <% } else { %>
-        <h2 title="Element <%= element.name %>" class="title"><%= element.name %></h2>
+        <h2 title="Element <%= element.name %>" class="title"><%= element.name.replace( /([A-Z])/g, " $1" ) %></h2>
       <% } %>
     <% } %>
   </div>
