@@ -1,0 +1,63 @@
+<div id="qpp-nav-footer">
+
+  <footer>
+    <div class="responsive-container">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="logo-container">
+            <img src="/images/ecqi-logo-reversed.png" alt="Electronic Clinical Quality Improvement Resource Center"
+              class="ecqi-logo">
+            <div class="social-container">
+              <img class="social-logo hhs" src="/images/hhs-logo-white.svg" alt="Department of Health and Human Services" />
+              <img class="social-logo cms" src="/images/cms-logo-white.svg" alt="Centers for Medicare and Medicaid" />
+              <img class="social-logo healthit" src="/images/healthit-logo-white.svg" alt="HealthIT.gov" />
+              <img class="social-logo usagov" src="/images/usagov-logo-white.svg" alt="USA.gov" />
+            </div>
+          </div>
+          <div class="links">
+            <ul>
+              <li><a href="#">Meaningful Measures</a></li>
+              <li><a href="#">Measures Management System</a></li>
+              <li><a href="#">Hospital Quality Initiative</a></li>
+              <li><a href="https://qpp.cms.gov">Quality Payment Program</a></li>
+            </ul>
+            <ul class="small">
+              <li><a href="/privacy" data-track-category="FooterNav" data-track-action="OpenPrivacyDisclaimer"
+                  data-track-label="Notice of Privacy and Disclaimer">CMS Privacy Notice</a></li>
+              <li><a href="/accessibility" data-track-category="FooterNav" data-track-action="OpenAccessibility"
+                  data-track-label="Accessibility">Accessibility</a></li>
+              <li><a href="mailto:ecqi-resource-center@hhs.gov" class="email-link contact">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<div>
+  <script type="text/javascript">
+    //<![CDATA[
+    // Code to determine how to target the frames / no frames link.  This must support cases where the modeldoc
+    // is standalone or when it's embedded in an iframe (like in a FHIR IG).
+    // If the parent is its frameset, then target the parent, else target itself
+    var frameTogglerTarget = (window.parent.frames.length === 3) ? '_parent' : '_self';
+    var frameTogglers = document.getElementsByClassName('frameToggler');
+    for (var i = 0; i < frameTogglers.length; i++) {
+      frameTogglers[i].target = frameTogglerTarget;
+    }
+    //]]>
+  </script>
+</div>
+<a name="skip-navbar_bottom"></a>
+</div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+</script>
+<script src="/js/vendor.js">
+</script>
+<script>
+  $(window).scroll(function () { $(this).scrollTop() > 1200 ? $(".js-scroll-top").fadeIn() : $(".js-scroll-top").fadeOut() })
+</script>

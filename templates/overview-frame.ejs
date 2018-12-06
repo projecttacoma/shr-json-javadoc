@@ -2,11 +2,11 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <!-- NewPage -->
 <head>
-  <title>Overview List (<%= metaData.projectShorthand %> 2017)</title>
+  <title>Overview List (<%= metaData.projectShorthand %>)</title>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <meta name="date" content="2016-01-11"/>
-  <meta name="keywords" content="Overview List, <%= metaData.projectShorthand %> Reference Model Specification"/>
-  <link rel="stylesheet" type="text/css" href="stylesheet.css" title="Style"/>
+  <meta name="keywords" content="Overview List, <%= metaData.projectShorthand %>"/>
+  <link rel="stylesheet" type="text/css" href="/css/qpp.ecqi.css" title="Style" />
   <script type="text/javascript">
   //<![CDATA[
     function loadPackageFrames(pkgContent, pkgInfo)
@@ -17,11 +17,15 @@
   //]]>
   </script>
 </head>
-<body>
-<h1 title="<%= metaData.projectShorthand %> Reference Model Specification" class="bar"><strong><%= metaData.projectShorthand %> Reference Model Specification</strong></h1>
-<div class="indexHeader"><a href="allclasses-frame.html" target="packageFrame">All Classes</a></div>
-<div class="indexContainer">
-  <h2 title="Packages">Packages</h2>
+<body class="data-element-repository-frame">
+<%- include('_drupal_elements', { pageName: `${metaData.projectShorthand}-overview-frame` }); _%>
+
+<div class="responsive-container">
+
+  <div class="all-classes"><a href="allclasses-frame.html" target="packageFrame">All Classes</a></div>
+
+  <label>Packages</label>
+  
   <ul title="Packages">
   <% namespaces.forEach((namespace) => { -%>
     <% if (namespace.name.split(".")[0] != "shr") { %> 

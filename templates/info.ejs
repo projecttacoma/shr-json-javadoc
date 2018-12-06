@@ -6,13 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="date" content="2016-01-11"/>
 <meta name="keywords" content="<%= namespace.name %> Namespace"/>
-<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style"/>
+<link rel="stylesheet" type="text/css" href="/css/qpp.ecqi.css" title="Style" />
 </head>
 <body>
 <script type="text/javascript">
   //<![CDATA[
 if (location.href.indexOf('is-external=true') == -1) {
-    parent.document.title="<%= metaData.projectShorthand %> Reference Model";
+    parent.document.title="<%= metaData.projectShorthand %>";
 }
 //]]>
 </script>
@@ -23,13 +23,13 @@ if (location.href.indexOf('is-external=true') == -1) {
 <div class="topNav"><a name="navbar_top"></a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow"></a>
   <ul class="navList" title="Navigation">
     <li class="navBarCell1Rev"><a href="../overview-summary.html">Back to overview</a></li>
-    <!-- <li class="navBarCell1Rev"><a href="/../" target="_top">Back to <%= metaData.projectShorthand %> Website</a></li> -->
   </ul>
-  <div class="aboutLanguage"><em><strong><%= metaData.projectShorthand %> Reference Model Version</strong></em><br/><%= namespace.name %></div>
+  <div class="aboutLanguage"><em><strong><%= metaData.projectShorthand %><%= namespace.name %></div>
 </div>
 <a name="skip-navbar_top"></a>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer">
+<%- include('_drupal_elements', { pageName: `${metaData.projectShorthand}-info-${namespace.name}` }); _%>
+<div class="responsive-container" id="main_contents">
 <h2 title="Overview">Overview of <%= namespace.name %></h2>
   <p><%- makeHtml(namespace.description) %></p>
 </div>

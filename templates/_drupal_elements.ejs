@@ -1,0 +1,16 @@
+<div id="data_element_id"><%= drupalVars.idFor(pageName); %></div>
+<div id="data_element_version"><%= drupalVars.exportVersion; %></div>
+<div id="data_element_date"><%= drupalVars.exportTime; %></div>
+<div id="data_element_summary">
+  <% if (locals.element) { -%>
+    <dd>
+      <% if (element.namespace == "ecqm.dataelement") { %>
+      <%- include('./tables/dataElementDescription', { description: element.description }) -%>
+      <% } else { -%>
+      <div class="block">
+        <%- makeHtml(element.description) -%>
+      </div>
+      <% } -%>
+    </dd>
+  <% } -%>
+</div>

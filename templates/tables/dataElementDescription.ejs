@@ -1,16 +1,18 @@
 <% var cf_raw = description.split("Clinical Focus:")[1] 
 if (cf_raw != undefined) {
   var cf = cf_raw.split("),")[0] -%>
-    <div><b>Clinical Focus: </b><%= cf %></div>
+    <label>Clinical Focus:</label> <%- cf && cf.trim() != '' ? cf + "<br>" : '<span class="na">n/a</span>' %>
   <% des_raw = description.split("Data Element Scope:")[1] 
     var des = des_raw.split("),")[0] -%>
-    <div><b>Data Element Scope: </b><%= des %></div>
+    <label>Data Element Scope:</label> <%- des && des.trim() != '' ? des + "<br>" : '<span class="na">n/a</span>' %>
   <% ic_raw = description.split("Inclusion Criteria:")[1] 
     var ic = ic_raw.split("),")[0] -%>
-    <div><b>Inclusion Criteria: </b><%= ic %></div>
+    <label>Inclusion Criteria:</label> <%- ic && ic.trim() != '' ? ic + "<br>" : '<span class="na">n/a</span>' %>
   <% ec_raw = description.split("Exclusion Criteria:")[1] 
     var ec = ec_raw.split(")")[0] -%>
-    <div><b>Exclusion Criteria: </b><%= ec %></div>
-  <% constaints = description.split("-- ")[1] -%>
-    <div><%= constaints %></div>
+    <label>Exclusion Criteria:</label> <%- ec && ec.trim() != '' ? ec + "<br>" : '<span class="na">n/a</span>' %>
+  <% var constraints = description.split("-- ")[1];
+    if (constraints && constraints.trim() != '') { -%>
+      <%- makeHtml(constraints.trim()) -%>
+    <% } %>
 <% } %>

@@ -1,9 +1,5 @@
-<% if (index % 2 == 0) { %>
-  <tr class="rowColor">
-<% } else { %>
-  <tr class="altColor">
-<% } %>
-  <td class="colFirst">
+<div class="data-element">
+  <div class="de-definition">
     <div class="block">
     <% if ('title' in field) { %>
       <code><strong><%= field.title %></strong></code>
@@ -18,13 +14,13 @@
     <% } else { %>
       <div class="block"><%- makeHtml(field.description) %></div>
     <% } %>
-  </td>
-  <td class="colMiddle">
+  </div>
+  <div class="de-constraints">
     <% field.pConstraints.forEach(function(constraint) { -%>
       <div class="block"><code><strong><%= constraint.name %></strong></code></div>
     <% }) %>
-  </td>
-  <td class="colLast">
+  </div>
+  <div class="de-value">
     <% field.pConstraints.forEach(function(constraint) { -%>
       <% if (constraint.href) { -%>
         <div class="block">
@@ -37,8 +33,8 @@
           <%= constraint.back %>
         </div>
       <% } else { -%>
-        <div class="block"><%= constraint.value %></div>
+        <div><%- makeHtml(constraint.value) %></div>
       <% } -%>
     <% }) -%>
-  </td>
-</tr>
+  </div>
+</div>

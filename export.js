@@ -2,12 +2,17 @@ const ejs = require('ejs');
 const fs = require('fs');
 const path = require('path');
 const bunyan = require('bunyan');
+const stringHash = require('string-hash');
 const ncp = require('ncp').ncp;
 const Namespaces = require('./components/namespaces');
 const Elements = require('./components/elements');
 
 const showdown = require('showdown');
 const mdConverter = new showdown.Converter();
+
+// Variables for Drupal. Specified globally to ensure they're consistent across files
+const exportTime = new Date().toISOString();
+const exportVersion = '0.1.0';
 
 var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
 var logger = rootLogger;
@@ -32,12 +37,26 @@ function makeHtml(md) {
   if (md != null) {
     md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
+  mdConverter.setOption('simplifiedAutoLink', true);
+  return mdConverter.makeHtml(md);
+}
+
+function idFor(str) {
+  return stringHash(str);
+}
+
+function makeSummaryHtml(md) {
+  // First we need to escape < and >
+  if (md != null) {
+    md = md.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
   return mdConverter.makeHtml(md);
 }
 
 // Function to generate and write html from an ejs template
-function renderEjsFile(template, pkg, destination) {
-  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, {makeHtml: makeHtml}), (error, htmlText) => {
+function renderEjsFile(template, pkg, outDirectory, filePath) {
+  const destination = path.join(outDirectory, filePath);
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });
@@ -109,9 +128,9 @@ class SHR {
   buildPackageFiles() {
     for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-pkg.html`;
-      const filePath = path.join(this.outDirectory, namespace.path, fileName);
+      const filePath = path.join(namespace.path, fileName);
       const ejsPkg = { elements: namespace.elements.sort(), namespace: namespace, metaData: this.metaData };
-      renderEjsFile('templates/pkg.ejs', ejsPkg, filePath);
+      renderEjsFile('templates/pkg.ejs', ejsPkg, this.outDirectory, filePath);
     }
   }
 
@@ -119,31 +138,31 @@ class SHR {
   buildInfoFiles() {
     for (const namespace of this.namespaces.list()) {
       const fileName = `${namespace.path}-info.html`;
-      const filePath = path.join(this.outDirectory, namespace.path, fileName);
+      const filePath = path.join(namespace.path, fileName);
       const ejsPkg = { namespace: namespace, metaData: this.metaData  };
-      renderEjsFile('templates/info.ejs', ejsPkg, filePath);
+      renderEjsFile('templates/info.ejs', ejsPkg, this.outDirectory, filePath);
     }
   }
 
   // Builds the overview list which displays all the namespaces
   buildOverviewFrame() {
     const ejsPkg = { namespaces: this.namespaces.list(), metaData: this.metaData  };
-    const filePath = path.join(this.outDirectory, 'overview-frame.html');
-    renderEjsFile('templates/overview-frame.ejs', ejsPkg, filePath);
+    const filePath = 'overview-frame.html';
+    renderEjsFile('templates/overview-frame.ejs', ejsPkg, this.outDirectory, filePath);
   }
 
   // Builds overiew list of all the data elements on the main page
   buildOverviewSummary() {
-    const ejsPkg = { elements: this.elements.list(), metaData: this.metaData  };
-    const filePath = path.join(this.outDirectory, 'overview-summary.html');
-    renderEjsFile('templates/overview-summary.ejs', ejsPkg, filePath);
+    const ejsPkg = { elements: this.elements.list(), metaData: this.metaData, namespaces: this.namespaces.list() };
+    const filePath = 'overview-summary.html';
+    renderEjsFile('templates/overview-summary.ejs', ejsPkg, this.outDirectory, filePath);
   }
 
   // Builds list of all the data elements on the main page
   buildAllElementsFrame() {
     const ejsPkg = { elements: this.elements.list().filter(de=>de.hierarchy.length > 0), metaData: this.metaData  };
-    const filePath = path.join(this.outDirectory, 'allclasses-frame.html');
-    renderEjsFile('templates/allclasses-frame.ejs', ejsPkg, filePath);
+    const filePath = path.join('allclasses-frame.html');
+    renderEjsFile('templates/allclasses-frame.ejs', ejsPkg, this.outDirectory, filePath);
   }
 
   // Builds pages for each data element
@@ -153,8 +172,8 @@ class SHR {
       var dataElements = this.elements.elements;
       const ejsPkg = { element: element, dataElements: dataElements, metaData: this.metaData  };
       const fileName = `${element.name}.html`;
-      const filePath = path.join(this.outDirectory, element.namespacePath, fileName);
-      renderEjsFile('templates/dataElement.ejs', ejsPkg, filePath);
+      const filePath = path.join(element.namespacePath, fileName);
+      renderEjsFile('templates/dataElement.ejs', ejsPkg, this.outDirectory, filePath);
     }
   }
 

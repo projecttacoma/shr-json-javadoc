@@ -1,9 +1,4 @@
-<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0">
-  <tr>
-    <th class="colFirst" scope="col">Definition</th>
-    <th class="colMiddle">Constraints</th>
-    <th class="colLast" scope="col">Value</th>
-  </tr>
+
   <% var index = 0 %>
   <% if ('pValue' in element) { -%>
     <% element.pValue.forEach(function(value) { %>
@@ -34,18 +29,4 @@
         <% } %>
       <% index += 1; } -%>
     <% }) -%>
-
-
-    <!-- <% element.fields.forEach(function(field) { -%>
-      <% if (!('inheritance' in field) && field.path != 'qdm-attribute') { -%>
-        <%- include('fieldRow', { field: field, index: index }) -%>
-      <% index += 1; } -%>
-    <% }) -%>
-    <% var index = 0 %>
-    <% element.fields.forEach(function(field) { -%>
-      <% if (('inheritance' in field) && field.path != 'qdm-attribute') { -%>
-        <%- include('fieldRow', { field: field, index: index }) -%>
-      <% index += 1; } -%>
-    <% }) -%> -->
   <% } -%>
-</table>
