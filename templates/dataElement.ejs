@@ -27,9 +27,9 @@
       <h1 title="Element <%= element.name %>" id="data_element_title"><%= element.name %> - <%= element.description.split(".")[0] %></h1>
     <% } else { %>
       <% if (element.isEntry) { %>
-        <h1 title="Entry Element <%= element.name %>" id="data_element_title"><%= element.name.replace( /([A-Z])/g, " $1" ) %></h1>
+        <h1 title="Entry Element <%= element.name %>" id="data_element_title"><%= titleize(element.name) %>
       <% } else { %>
-        <h1 title="Element <%= element.name %>" id="data_element_title"><%= element.name.replace( /([A-Z])/g, " $1" ) %></h1>
+        <h1 title="Element <%= element.name %>" id="data_element_title"><%= titleize(element.name) %></h1>
       <% } %>
     <% } %>
     <p class="lead subtitle" id="data_element_package"><%= element.namespace %></p>
@@ -48,7 +48,7 @@
           <dt>Rationale:</dt>
         <% } else if (element.namespace == "qdm.attribute" || element.namespace == "qdm.dataelement") { %>
           <dt>QDM Definition:</dt>
-        <% } else { %>
+        <% } else if (element.namespace != "ecqm.unions") { %>
           <dt>Description:</dt>
         <% } %>
         <dd>

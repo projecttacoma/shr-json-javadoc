@@ -3,7 +3,7 @@
 <div id="data_element_date"><%= drupalVars.exportTime; %></div>
 <div id="data_element_summary">
   <% if (locals.element) { -%>
-    <dd>
+    <div>
       <% if (element.namespace == "ecqm.dataelement") { %>
       <%- include('./tables/dataElementDescription', { description: element.description }) -%>
       <% } else { -%>
@@ -11,6 +11,7 @@
         <%- makeHtml(element.description) -%>
       </div>
       <% } -%>
-    </dd>
+    </div>
   <% } -%>
 </div>
+<div id="data_element_cms_id"><%_ if (locals.element && element.namespace == "ecqm.measure") { %><%= element.name; _%><%_ } _%></div>

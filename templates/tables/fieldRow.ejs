@@ -1,10 +1,10 @@
 <div class="data-element">
   <div class="de-definition">
-    <div class="block">
+    <div>
     <% if ('title' in field) { %>
-      <code><strong><%= field.title %></strong></code>
+      <%= titleize(field.title) %>
     <% } else { %>
-      <code><strong><a href="../<%= field.path %>/<%= field.name %>.html"><%= field.name %></a></strong></code>
+      <a href="../<%= field.path %>/<%= field.name %>.html"><%= titleize(field.name) %></a>
     <% } %>
     </div>
     <% if (field.path == 'ecqm-dataelement') { %>
@@ -12,29 +12,32 @@
       <% basedOn = dataElements[dataElements[field.fqn].basedOn[0]] %>
       <div><b><%= basedOn.name %>:</b> <%= basedOn.description %></div>
     <% } else { %>
-      <div class="block"><%- makeHtml(field.description) %></div>
+      <div><%- makeHtml(field.description) %></div>
     <% } %>
   </div>
   <div class="de-constraints">
-    <% field.pConstraints.forEach(function(constraint) { -%>
-      <div class="block"><code><strong><%= constraint.name %></strong></code></div>
-    <% }) %>
-  </div>
-  <div class="de-value">
-    <% field.pConstraints.forEach(function(constraint) { -%>
-      <% if (constraint.href) { -%>
-        <div class="block">
-          <%= constraint.front %>
-          <% if (constraint.targetTop) { -%>
-            <a href="<%= constraint.href %>" target="_top"><%= constraint.value %></a>
-          <% } else { -%>
-            <a href="<%= constraint.href %>"><%= constraint.value %></a>
-          <% } -%>
-          <%= constraint.back %>
-        </div>
-      <% } else { -%>
-        <div><%- makeHtml(constraint.value) %></div>
-      <% } -%>
-    <% }) -%>
+    <b>Constraints:</b>
+    <ul>
+      <% field.pConstraints.forEach(function(constraint) { -%>
+        <li class="constraint">
+          <div class="constraint_label"><code><%= constraint.name %></code></div>
+          <div class="constraint_value">
+            <% if (constraint.href) { -%>
+              <%= constraint.front %>
+              <% if (constraint.targetTop) { -%>
+              <a href="<%= constraint.href %>" target="_top">
+                <%= constraint.value %></a>
+              <% } else { -%>
+              <a href="<%= constraint.href %>">
+                <%= constraint.value %></a>
+              <% } -%>
+              <%= constraint.back %>
+            <% } else { -%>
+              <%- makeHtml(constraint.value) %>
+            <% } -%>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
   </div>
 </div>

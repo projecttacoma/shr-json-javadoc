@@ -41,7 +41,7 @@
                     <% if (element.namespacePath == "ecqm-measure" ) { %>
                       <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name %></a>
                     <% } else { %>
-                      <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= element.name.replace( /([A-Z])/g, " $1" ) %></a>
+                      <a href="<%= element.namespacePath %>/<%= element.name %>.html"><%= titleize(element.name) %></a>
                     <% } %>
                   </div>
                   <div class="overview-description">

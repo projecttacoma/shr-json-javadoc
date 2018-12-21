@@ -10,9 +10,60 @@ const Elements = require('./components/elements');
 const showdown = require('showdown');
 const mdConverter = new showdown.Converter();
 
+// Inflected is a direct port of ActiveSupport's Inflector to NPM
+const Inflector = require('inflected');
+Inflector.inflections('en', (inflect) => {
+  inflect.acronym('ACE');
+  inflect.acronym('ARB');
+  inflect.acronym('VTE');
+  inflect.acronym('CD4');
+  inflect.acronym('DEXA');
+  inflect.acronym('PROMIS');
+  inflect.acronym('HOOS');
+  inflect.acronym('VR12');
+  inflect.acronym('VR');
+  inflect.acronym('MCS');
+  inflect.acronym('PCS');
+  inflect.acronym('DTaP');
+  inflect.acronym('HIV');
+  inflect.acronym('ESRD');
+  inflect.acronym('ASCVD');
+  inflect.acronym('PCI');
+  inflect.acronym('CABG');
+  inflect.acronym('IIbIIIa');
+  inflect.acronym('IIb');
+  inflect.acronym('IIIa');
+  inflect.acronym('INR');
+  inflect.acronym('MMR');
+  inflect.acronym('ED');
+  inflect.acronym('IgG');
+  inflect.acronym('HCL');
+  inflect.acronym('LVSD');
+  inflect.acronym('VFP');
+  inflect.acronym('IPC');
+  inflect.acronym('GCS');
+  inflect.acronym('ADHD');
+  inflect.acronym('VZV');
+  inflect.acronym('PAD');
+  inflect.acronym('BMI');
+  inflect.acronym('ECG');
+  inflect.acronym('FOBT');
+  inflect.acronym('IPV');
+  inflect.acronym('ICU');
+  inflect.acronym('NICU');
+  inflect.acronym('PCP');
+  inflect.acronym('SCIP');
+  inflect.acronym('SCIPVTE');
+  inflect.acronym('tPA');
+  inflect.acronym('MI');
+  inflect.acronym('LDL');
+  inflect.acronym('BP');
+  inflect.acronym('ONC');
+});
+
 // Variables for Drupal. Specified globally to ensure they're consistent across files
 const exportTime = new Date().toISOString();
-const exportVersion = '0.1.0';
+const exportVersion = '0.3.0';
 
 var rootLogger = bunyan.createLogger({ name: 'shr-json-javadoc' });
 var logger = rootLogger;
@@ -53,10 +104,44 @@ function makeSummaryHtml(md) {
   return mdConverter.makeHtml(md);
 }
 
+/**
+ * titleize takes in a camel-cased string that LooksLikeThis
+ * And makes it into a string that "Looks Like This"
+ * Using rules defined in Inflected, additional acronym rules defined above,
+ * and special-case splits defined below (largely cases where splitting on a
+ * capital letter wouldn't get the desired outcome). I'm not happy we have to define
+ * so many special-case splits below, but there's no great way to say 'or/of at the end
+ * of a word is always split into a new word'.
+ * @param {String} str 
+ * @returns {String}
+ */
+function titleize(str) {
+  let newStr = Inflector.titleize(str);
+  newStr = newStr.replace('IIbIIIa', 'IIb/IIIa');
+  newStr = newStr.replace('Encouterwith', 'Encounter With');
+  newStr = newStr.replace('Dueto', 'Due to');
+  newStr = newStr.replace('Medicationor', 'Medication or');
+  newStr = newStr.replace('Administeredor', 'Administered or');
+  newStr = newStr.replace('Dayofor', 'Day of or');
+  newStr = newStr.replace('Appliedor', 'Applied or');
+  newStr = newStr.replace('Fibrillationor', 'Fibrillation or');
+  newStr = newStr.replace('Historyof', 'History of');
+  newStr = newStr.replace('Riskfor', 'Risk for');
+  newStr = newStr.replace('Vt Eor', 'VTE or');
+  newStr = newStr.replace('Dayofor', 'Day of or');
+  newStr = newStr.replace('Assessmentor', 'Assessment or');
+  newStr = newStr.replace('Prophylaxisby', 'Prophylaxis by');
+  newStr = newStr.replace('Receivedon', 'Received on');
+  newStr = newStr.replace('Admissionor', 'Admission or');
+  newStr = newStr.replace('Stayor', 'Stay or');
+  
+  return newStr.replace(/([A-Za-z])(\d+)/g, '$1 $2');
+}
+
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, outDirectory, filePath) {
   const destination = path.join(outDirectory, filePath);
-  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });
