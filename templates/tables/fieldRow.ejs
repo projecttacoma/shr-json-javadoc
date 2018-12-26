@@ -10,34 +10,36 @@
     <% if (field.path == 'ecqm-dataelement') { %>
       <div><%- include('./dataElementDescription', { description: field.description }) -%></div>
       <% basedOn = dataElements[dataElements[field.fqn].basedOn[0]] %>
-      <div><b><%= basedOn.name %>:</b> <%= basedOn.description %></div>
+      <div><b><%= titleize(basedOn.name) %>:</b> <%= basedOn.description %></div>
     <% } else { %>
       <div><%- makeHtml(field.description) %></div>
     <% } %>
   </div>
-  <div class="de-constraints">
-    <b>Constraints:</b>
-    <ul>
-      <% field.pConstraints.forEach(function(constraint) { -%>
-        <li class="constraint">
-          <div class="constraint_label"><code><%= constraint.name %></code></div>
-          <div class="constraint_value">
-            <% if (constraint.href) { -%>
-              <%= constraint.front %>
-              <% if (constraint.targetTop) { -%>
-              <a href="<%= constraint.href %>" target="_top">
-                <%= constraint.value %></a>
+  <% if (field.pConstraints.length > 0) { %>
+    <div class="de-constraints">
+      <b>Constraints:</b>
+      <ul>
+        <% field.pConstraints.forEach(function(constraint) { -%>
+          <li class="constraint">
+            <div class="constraint_label"><code><%= constraint.name %></code></div>
+            <div class="constraint_value">
+              <% if (constraint.href) { -%>
+                <%= constraint.front %>
+                <% if (constraint.targetTop) { -%>
+                <a href="<%= constraint.href %>" target="_top">
+                  <%= constraint.value %></a>
+                <% } else { -%>
+                <a href="<%= constraint.href %>">
+                  <%= titleize(constraint.value) %></a>
+                <% } -%>
+                <%= constraint.back %>
               <% } else { -%>
-              <a href="<%= constraint.href %>">
-                <%= constraint.value %></a>
+                <%- makeHtml(constraint.value) %>
               <% } -%>
-              <%= constraint.back %>
-            <% } else { -%>
-              <%- makeHtml(constraint.value) %>
-            <% } -%>
-          </div>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
 </div>

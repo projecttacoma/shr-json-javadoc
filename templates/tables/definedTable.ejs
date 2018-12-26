@@ -6,7 +6,7 @@
     <% index += 1; }) %>
   <% } -%>
   <% if (element.fields) { -%>
-    <% element.fields.forEach(function(field) { -%>
+    <% element.fields.sort(fieldSort).forEach(function(field) { -%>
       <% if (!('inheritance' in field) && (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement') ) { -%>
         <% if (field.card) { %>
           <% if (field.card.max != 0 ) { %>
@@ -18,7 +18,7 @@
       <% index += 1; } -%>
     <% }) -%>
     <% var index = 0 %>
-    <% element.fields.forEach(function(field) { -%>
+    <% element.fields.sort(fieldSort).forEach(function(field) { -%>
       <% if (('inheritance' in field) && (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement') ) { -%>
         <% if (field.card) { %>
           <% if (field.card.max != 0 ) { %>

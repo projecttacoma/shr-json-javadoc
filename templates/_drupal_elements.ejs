@@ -14,4 +14,4 @@
     </div>
   <% } -%>
 </div>
-<div id="data_element_cms_id"><%_ if (locals.element && element.namespace == "ecqm.measure") { %><%= element.name; _%><%_ } _%></div>
+<div id="data_element_cms_id"><%_ if (locals.element && element.namespace.includes("ecqm.measure")) { %><%= element.name; _%><%_ } _%></div>

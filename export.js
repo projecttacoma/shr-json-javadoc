@@ -112,10 +112,15 @@ function makeSummaryHtml(md) {
  * capital letter wouldn't get the desired outcome). I'm not happy we have to define
  * so many special-case splits below, but there's no great way to say 'or/of at the end
  * of a word is always split into a new word'.
- * @param {String} str 
- * @returns {String}
+ * NOTE: titleize short-circuits if it runs into a string formatted like a CMS ID, to avoid
+ * titleizing them. Return value in this case will be the original string.
+ * @param {String} str a CamelCased string to be titleized
+ * @returns {String} a Titleized version of the original string, e.g. "Camel Cased" for "CamelCased"
  */
 function titleize(str) {
+  if (str.search(/CMS\d{1,3}v\d{1,2}/) != -1) {
+    return str;
+  }
   let newStr = Inflector.titleize(str);
   newStr = newStr.replace('IIbIIIa', 'IIb/IIIa');
   newStr = newStr.replace('Encouterwith', 'Encounter With');
@@ -138,10 +143,37 @@ function titleize(str) {
   return newStr.replace(/([A-Za-z])(\d+)/g, '$1 $2');
 }
 
+// Function for sorting field arrays, so they show up alphabetically by name
+function fieldSort(a, b) {
+  let newA = 'name' in a ? a.name : '';
+  let newB = 'name' in b ? b.name : '';
+  return newA.localeCompare(newB);
+}
+
+// Allow the Modeldoc to filter out a section if the elements in it aren't there
+function hasMoreThan0Fields(element) {
+  let length = 0;
+  if ('pValue' in element) {
+    length += element.pValue.length;
+  }
+  if (element.fields) {
+    length += element.fields.filter((field) => {
+      return (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement');
+    }).length;
+  }
+  if (element.overridden !== undefined && element.overridden.length) {
+    length += element.overridden.filter((constraint) => {
+      return !constraint.sourceHref.includes('shr');
+    }).length;
+  }
+
+  return length > 0;
+}
+
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, outDirectory, filePath) {
   const destination = path.join(outDirectory, filePath);
-  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, fieldSort: fieldSort, hasMoreThan0Fields: hasMoreThan0Fields, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });

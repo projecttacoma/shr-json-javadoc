@@ -11463,25 +11463,50 @@ ul.blockList {list-style:none}
 .data-element {
   margin-bottom:20px;
   padding-top:20px;
-  border-top:1px solid #eee;}
+  border-top:1px solid #ddd;
+}
 .data-element .de-definition code {font-size:1.25em; margin-left:-5px}
 .de-definition p {margin-bottom:10px;}
+
+.de-definition label {margin-bottom:0}
+.de-constraints {
+  display:flex;
+  flex-flow:row wrap;
+}
 
 .de-constraints, .de-value {margin-top:10px;display:flex;}
 .de-constraints>div, .de-value>div {margin: 0 10px 0 0}
 
-.de-constraints::before {
-  content:"Constraints: ";
-  font-size:1em;
-  font-weight:500;
-  margin-right:10px;
+.de-constraints ul {list-style:none;display:table}
+.de-constraints ul li {display:table-row}
+.de-constraints ul li .constraint_label,
+.de-constraints ul li .constraint_value {
+  display:table-cell;
+  padding-right:10px;
 }
 
-.de-value::before {
-  content:"Value: ";
-  font-size:1em;
-  font-weight:500;
-  margin-right:10px;
+.de-constraints ul li code {font-size:100%}
+.de-constraints ul li code strong {font-size:100%}
+.data-element .de-definition code {font-size:100%;margin-left:0;}
+
+.de-definition .de-title {font-size:2.4rem}
+
+.de-constraints .de-title {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 100%; /* relative size */ 
+  padding: 2px 4px;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  }
+
+  /* kill the before labels */
+.de-constraints::before, .de-value::before {
+  content:'';
+}
+/* Needs extra classes in selector to override specificity for the rule */
+.field .field-item .de-constraints ul {
+  margin:0 10px 5px 0;
 }
 
 .navbar-subsection {

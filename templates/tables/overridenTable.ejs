@@ -1,35 +1,45 @@
 <% element.overridden.forEach(function(constraint, index) { -%>
-  <div class="data-element">
-    <div class="de-definition">
-      <%= constraint.path %>
-      <% if (constraint.sourceHref) { %>
-        <div>Defined in <a href="<%= constraint.sourceHref %>"><%= constraint.source %></a></div>
-      <% } else { %>
-        <div>Defined in <%= constraint.source %></div>
-      <% } %>
+  <% if (!constraint.sourceHref.includes('shr')) { %>
+    <div>
+      <div>
+        <div class="de-title"><%= constraint.path %></div>
+        <% if (constraint.sourceHref) { %>
+          <div>Defined in <a href="<%= constraint.sourceHref %>"><%= constraint.source %></a></div>
+        <% } else { %>
+          <div>Defined in <%= constraint.source %></div>
+        <% } %>
+      </div>
+      <div class="de-constraints">
+        <b>Constraints:</b>
+        <ul>
+          <li class="constraint"></li>
+            <% if (constraint.overrideHref) { %>
+              <div class="constraint_label">Constrained in <a href="<%= constraint.overrideHref %>"><%= titleize(constraint.override) %></a></div>
+            <% } else { %>
+              <div class="constraint_label">Constrained in <%= titleize(constraint.override) %></div>
+            <% } %>
+            <div class="de-value">
+              <% if (constraint.href) { -%>
+              <div>
+                <%= constraint.front %>
+                <% if (constraint.targetTop) { -%>
+                <a href="<%= constraint.href %>" target="_top">
+                  <%= constraint.value %></a>
+                <% } else { -%>
+                <a href="<%= constraint.href %>">
+                  <%= constraint.value %></a>
+                <% } -%>
+                <%= constraint.back %>
+              </div>
+              <% } else { -%>
+              <div>
+                <%- makeHtml(constraint.value) %>
+              </div>
+              <% } -%>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="de-constraints">
-      <div class="de-title"><%= constraint.name %></div>
-      <% if (constraint.overrideHref) { %>
-        <div>Constrained in <a href="<%= constraint.overrideHref %>"><%= constraint.override %></a></div>
-      <% } else { %>
-        <div>Constrained in <%= constraint.override %></div>
-      <% } %>
-    </div>
-    <div class="de-value">
-      <% if (constraint.href) { -%>
-        <div>
-          <%= constraint.front %>
-          <% if (constraint.targetTop) { -%>
-            <a href="<%= constraint.href %>" target="_top"><%= constraint.value %></a>
-          <% } else { -%>
-            <a href="<%= constraint.href %>"><%= constraint.value %></a>
-          <% } -%>
-          <%= constraint.back %>
-        </div>
-      <% } else { -%>
-        <div><%- makeHtml(constraint.value) %></div>
-      <% } -%>
-    </div>
-  </div>
+  <% } %>
 <% }) -%>

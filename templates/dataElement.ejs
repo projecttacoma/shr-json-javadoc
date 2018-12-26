@@ -23,7 +23,7 @@
   <!-- ======== START OF CLASS DATA ======== -->
 
   <div class="title-cover background-lines-effect content-page data-element-page">
-    <% if (element.namespace == "ecqm.measure") { -%>
+    <% if (element.namespace.includes("ecqm.measure")) { -%>
       <h1 title="Element <%= element.name %>" id="data_element_title"><%= element.name %> - <%= element.description.split(".")[0] %></h1>
     <% } else { %>
       <% if (element.isEntry) { %>
@@ -44,12 +44,12 @@
   <div class="responsive-container" id="main_contents">
     <div class="description">
       <dl>
-        <% if (element.namespace == "ecqm.measure") { -%>
+        <% if (element.namespace.includes("ecqm.measure")) { -%>
           <dt>Rationale:</dt>
         <% } else if (element.namespace == "qdm.attribute" || element.namespace == "qdm.dataelement") { %>
           <dt>QDM Definition:</dt>
         <% } else if (element.namespace != "ecqm.unions") { %>
-          <dt>Description:</dt>
+          <dt>Value Set Description from VSAC:</dt>
         <% } %>
         <dd>
         <% if (element.namespace == "ecqm.dataelement") { %>
@@ -60,20 +60,20 @@
         </dd>
       </dl>
       <dl>
-        <% if (element.hierarchy && element.namespace != "ecqm.measure") { -%>
+        <% if (element.hierarchy && !element.namespace.includes("ecqm.measure")) { -%>
             <% var finalElement = { path: element.namespacePath, name: element.name };
                var hierarchy = element.hierarchy.slice();
                hierarchy.push(finalElement);
                hierarchy.forEach(function(ancestor, i) { -%>
-                <% if (i == hierarchy.length - 2) { -%>
-                <% if (ancestor.path == "qdm-dataelement" ) { %> 
-                <dt>QDM Datatype:
-                <% } else { %>
-                <dt>Based On:
-                <% } %>
-                  <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= ancestor.name %></a>
-                </dt>
-                <p><%= dataElements[ancestor.fqn].description %></p>
+                <% if (i == hierarchy.length - 2 && ancestor.path != "shr-base" && ancestor.name != 'CmsEcqmComposition') { -%>
+                  <% if (ancestor.path == "qdm-dataelement" ) { %> 
+                  <dt>QDM Datatype:
+                  <% } else { %>
+                  <dt>Based On:
+                  <% } %>
+                    <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= titleize(ancestor.name) %></a>
+                  </dt>
+                  <p><%= dataElements[ancestor.fqn].description %></p>
                 <% } -%>
             <% }) -%>
         <% } -%>
@@ -85,7 +85,7 @@
           <ul class="class_list">
             <% element.children.forEach(function(child, i) { -%>
               <li>
-                <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < element.children.length - 1) { %>&nbsp;<% } -%>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < element.children.length - 1) { %>&nbsp;<% } -%>
               </li>
             <% }) -%>
           </ul>
@@ -110,7 +110,7 @@
                usedBy.sort((a, b) => { return a.name.localeCompare(b.name) });
                usedBy.forEach(function(child, i) { -%>
               <li>
-                <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < usedBy.length - 1) { %>&nbsp;<% } -%>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < usedBy.length - 1) { %>&nbsp;<% } -%>
               </li>
             <% }) -%>
           </ul>
@@ -124,7 +124,7 @@
               <% unions.sort((a, b) => { return a.name.localeCompare(b.name) });
                  unions.forEach(function(child, i) { -%>
                 <li>
-                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= child.name -%></a><% if (i < unions.length - 1) { %>,&nbsp;<% } -%>
+                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < unions.length - 1) { %>,&nbsp;<% } -%>
                 </li>
               <% }) -%>
             </ul>
@@ -135,30 +135,34 @@
     </div>
     <div class="description">
     </div>
-    <div class="summary">
-      <ul class="blockList">
-        <li class="blockList">
-          <!-- ========== PROPERTY SUMMARY =========== -->
-          <ul class="blockList">
-            <li class="blockList">
-              <a name="method_summary">
-              </a>
-              <div class="data-elements">
-                <% if (element.namespace == "ecqm.measure") { -%>
-                  <h3>Data Elements</h3>
-                <% } else { %> 
-                  <h3>QDM Attributes</h3>
-                <% } %>
-                <% if (element.overridden !== undefined && element.overridden.length) { -%>
-                  <%- include('./tables/overridenTable', { element: element }) -%>
-                <% } -%>
-                <%- include('./tables/definedTable', { element: element, dataElements: dataElements }) -%>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+    <% if (hasMoreThan0Fields(element)) { %>
+      <div class="summary">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- ========== PROPERTY SUMMARY =========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="method_summary">
+                </a>
+                <div class="data-elements">
+                    <% if (element.namespace.includes("ecqm.measure")) { -%>
+                      <h3>Data Elements</h3>
+                    <% } else if (element.namespace == 'ecqm.unions') { %> 
+                      <h3>Data Elements contained within the Union</h3>
+                    <% } else { %>
+                      <h3>QDM Attributes</h3>
+                    <% } %>
+                    <% if (element.overridden !== undefined && element.overridden.length) { -%>
+                      <%- include('./tables/overridenTable', { element: element }) -%>
+                    <% } -%>
+                    <%- include('./tables/definedTable', { element: element, dataElements: dataElements }) -%>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    <% } %>
   </div>
   <!-- ========= END OF CLASS DATA ========= -->
 
