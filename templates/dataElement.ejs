@@ -85,7 +85,7 @@
           <ul class="class_list">
             <% element.children.forEach(function(child, i) { -%>
               <li>
-                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < element.children.length - 1) { %>&nbsp;<% } -%>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (element.children.length - 1)){ %>&nbsp;<% } -%>
               </li>
             <% }) -%>
           </ul>
@@ -110,7 +110,7 @@
                usedBy.sort((a, b) => { return a.name.localeCompare(b.name) });
                usedBy.forEach(function(child, i) { -%>
               <li>
-                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < usedBy.length - 1) { %>&nbsp;<% } -%>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (usedBy.length - 1)) { %>&nbsp;<% } -%>
               </li>
             <% }) -%>
           </ul>
@@ -124,7 +124,7 @@
               <% unions.sort((a, b) => { return a.name.localeCompare(b.name) });
                  unions.forEach(function(child, i) { -%>
                 <li>
-                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < unions.length - 1) { %>,&nbsp;<% } -%>
+                  <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (unions.length - 1)) { %>,&nbsp;<% } -%>
                 </li>
               <% }) -%>
             </ul>

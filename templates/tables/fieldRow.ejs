@@ -7,6 +7,7 @@
       <a href="../<%= field.path %>/<%= field.name %>.html"><%= titleize(field.name) %></a>
     <% } %>
     </div>
+    <dt>Value Set Description from VSAC:</dt>
     <% if (field.path == 'ecqm-dataelement') { %>
       <div><%- include('./dataElementDescription', { description: field.description }) -%></div>
       <% basedOn = dataElements[dataElements[field.fqn].basedOn[0]] %>
@@ -15,7 +16,7 @@
       <div><%- makeHtml(field.description) %></div>
     <% } %>
   </div>
-  <% if (field.pConstraints.length > 0) { %>
+  <% if ((field.pConstraints.length > 0) && !element.namespace.includes("ecqm.measure")) { %>
     <div class="de-constraints">
       <b>Constraints:</b>
       <ul>

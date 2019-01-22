@@ -1,32 +1,31 @@
-
+<% var index = 0 %>
+<% if ('pValue' in element) { -%>
+  <% element.pValue.forEach(function(value) { %>
+    <%- include('fieldRow', { field: value, index: index, dataElements: dataElements, element: element }) -%>
+  <% index += 1; }) %>
+<% } -%>
+<% if (element.fields) { -%>
+  <% element.fields.sort(fieldSort).forEach(function(field) { -%>
+    <% if (!('inheritance' in field) && (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement') ) { -%>
+      <% if (field.card) { %>
+        <% if (field.card.max != 0 ) { %>
+          <%- include('fieldRow', { field: field, index: index, dataElements: dataElements, element: element }) -%>
+        <% } %>
+      <% } else { %>
+        <%- include('fieldRow', { field: field, index: index, dataElements: dataElements, element: element }) -%>
+      <% } %>
+    <% index += 1; } -%>
+  <% }) -%>
   <% var index = 0 %>
-  <% if ('pValue' in element) { -%>
-    <% element.pValue.forEach(function(value) { %>
-      <%- include('fieldRow', { field: value, index: index, dataElements: dataElements }) -%>
-    <% index += 1; }) %>
-  <% } -%>
-  <% if (element.fields) { -%>
-    <% element.fields.sort(fieldSort).forEach(function(field) { -%>
-      <% if (!('inheritance' in field) && (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement') ) { -%>
-        <% if (field.card) { %>
-          <% if (field.card.max != 0 ) { %>
-            <%- include('fieldRow', { field: field, index: index, dataElements: dataElements }) -%>
-          <% } %>
-        <% } else { %>
-          <%- include('fieldRow', { field: field, index: index, dataElements: dataElements }) -%>
+  <% element.fields.sort(fieldSort).forEach(function(field) { -%>
+    <% if (('inheritance' in field) && (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement') ) { -%>
+      <% if (field.card) { %>
+        <% if (field.card.max != 0 ) { %>
+          <%- include('fieldRow', { field: field, index: index, dataElements: dataElements, element: element }) -%>
         <% } %>
-      <% index += 1; } -%>
-    <% }) -%>
-    <% var index = 0 %>
-    <% element.fields.sort(fieldSort).forEach(function(field) { -%>
-      <% if (('inheritance' in field) && (field.path == 'qdm-attribute' || field.path == 'ecqm-dataelement') ) { -%>
-        <% if (field.card) { %>
-          <% if (field.card.max != 0 ) { %>
-            <%- include('fieldRow', { field: field, index: index, dataElements: dataElements }) -%>
-          <% } %>
-        <% } else { %>
-          <%- include('fieldRow', { field: field, index: index, dataElements: dataElements }) -%>
-        <% } %>
-      <% index += 1; } -%>
-    <% }) -%>
-  <% } -%>
+      <% } else { %>
+        <%- include('fieldRow', { field: field, index: index, dataElements: dataElements, element: element }) -%>
+      <% } %>
+    <% index += 1; } -%>
+  <% }) -%>
+<% } -%>
