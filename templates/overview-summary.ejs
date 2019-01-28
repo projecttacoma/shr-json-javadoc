@@ -46,7 +46,7 @@
                   </div>
                   <div class="overview-description">
                     <% if (element.namespace == "ecqm.dataelement") { %>
-                      <%- include('./tables/dataElementDescription', { description: element.description }) -%>
+                      <%- include('./tables/dataElementDescription', { description: element.description, valueSet: findValueSet(element, elements) }) -%>
                     <%} else { %>
                       <div class="block">
                         <%- makeHtml(element.description) %>
