@@ -67,9 +67,9 @@
                hierarchy.forEach(function(ancestor, i) { -%>
                 <% if (i == hierarchy.length - 2 && ancestor.path != "shr-base" && ancestor.name != 'CmsEcqmComposition') { -%>
                   <% if (ancestor.path == "qdm-dataelement" ) { %> 
-                  <dt>QDM Datatype:
+                  <dt>QDM Datatype - 
                   <% } else { %>
-                  <dt>Based On:
+                  <dt>QDM Attribute:
                   <% } %>
                     <a href="../<%= ancestor.path %>/<%= ancestor.name %>.html"><%= titleize(ancestor.name) %></a>
                   </dt>
@@ -85,7 +85,7 @@
           <ul class="class_list">
             <% element.children.forEach(function(child, i) { -%>
               <li>
-                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (element.children.length - 1)){ %>&nbsp;<% } -%>
+                <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (element.children.length - 1)) { %>&nbsp;<% } -%>
               </li>
             <% }) -%>
           </ul>

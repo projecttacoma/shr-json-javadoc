@@ -13,6 +13,6 @@ if (cf_raw != undefined) {
     <label>Exclusion Criteria:</label> <%- ec && ec.trim() != '' ? ec + "<br>" : '<span class="na">n/a</span>' %>
   <% var constraints = description.split("-- ")[1];
     if (constraints && constraints.trim() != '') { -%>
-      <%- makeHtml(constraints.trim()) -%>
+      <%- makeHtml(cleanConstraints(constraints.trim())) -%>
     <% } %>
 <% } %>
