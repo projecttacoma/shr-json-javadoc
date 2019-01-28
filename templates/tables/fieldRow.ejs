@@ -11,7 +11,7 @@
     <% if (field.path == 'ecqm-dataelement') { %>
       <div><%- include('./dataElementDescription', { description: field.description }) -%></div>
       <% basedOn = dataElements[dataElements[field.fqn].basedOn[0]] %>
-      <div><b><%= titleize(basedOn.name) %>:</b> <%= basedOn.description %></div>
+      <div><b>QDM Datatype - <%= titleize(basedOn.name) %>:</b> <%= basedOn.description %></div>
     <% } else { %>
       <div><%- makeHtml(field.description) %></div>
     <% } %>

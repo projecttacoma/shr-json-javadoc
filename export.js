@@ -90,6 +90,11 @@ function exportToPath(compiledSHR, outPath) {
   compiledSHR.generateHTML();
 }
 
+function cleanConstraints(constraints) {
+  const firstWordRegex = /^\w+ constrained/;
+  return constraints.replace(firstWordRegex, 'Constrained');
+}
+
 function makeHtml(md) {
   // First we need to escape < and >
   if (md != null) {
@@ -197,7 +202,7 @@ function hasMoreThan0Fields(element) {
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, outDirectory, filePath) {
   const destination = path.join(outDirectory, filePath);
-  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, fieldSort: fieldSort, hasMoreThan0Fields: hasMoreThan0Fields, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, fieldSort: fieldSort, hasMoreThan0Fields: hasMoreThan0Fields, cleanConstraints: cleanConstraints, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });
