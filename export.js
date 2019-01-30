@@ -110,10 +110,19 @@ function findValueSet(element, allElements) {
     // If a value set override exists, generate the title/url/OID based on that
     if (vs) {
       const vsUrl = vs.value.replace(/ \(REQUIRED\)/, '');
-      const vsOid = vs.value.match(/\/([\d.]+)\//)[1];
-      const title = vs.override.replace(element.hierarchy[element.hierarchy.length - 1 ].name, '');
-      const ret = { url: vsUrl, oid: vsOid, title: title };
-      return ret;
+
+      // If this is present in 'value', this is a Direct Reference Code
+      if (vs.value.includes('cs/codesystem')) {
+        const ret = `<a href="${vsUrl}">${cleanConstraints(element.description.split('-- ')[1])}</a>`;
+        return ret;
+        // Otherwise, it's a Valueset
+      } else {
+        const vsOid = vs.value.match(/\/([\d.]+)\//)[1];
+        const title = vs.override.replace(element.hierarchy[element.hierarchy.length - 1].name, '');
+        // const ret = { url: vsUrl, oid: vsOid, title: title };
+        const ret = `Constrained to codes in the ${titleize(title)} value set <a href = "${vsUrl}" target = "_blank" > <code>(${vsOid})</code></a>`;
+        return ret;
+      }
 
       // If a value set override doesn't exist, check to see if the "Subject value is type <x>" is set.
       // If it is, search allElements for the subject element, and get the valueset info from that recursively

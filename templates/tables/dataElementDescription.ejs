@@ -13,7 +13,7 @@ if (cf_raw != undefined) {
     <label>Exclusion Criteria:</label> <%- ec && ec.trim() != '' ? ec + "<br>" : '<span class="na">n/a</span>' %>
   <% var constraints = description.split("-- ")[1];
     if (valueSet) { %>
-      <p>Constrained to codes in the <%- titleize(valueSet.title) %> value set <a href="<%- valueSet.url %>" target="_blank"><code>(<%- valueSet.oid %>)</code></a></p>
+      <p><%- valueSet %></p>
     <% } else if (constraints && constraints.trim() != '') { -%>
       <%- makeHtml(cleanConstraints(constraints.trim())) -%>
     <% } %>
