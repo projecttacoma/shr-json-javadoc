@@ -1,5 +1,5 @@
 <%- include('_header'); -%>
-<%- include('_drupal_elements', { pageName: `${metaData.projectShorthand}-dataElement-${element.namespace}-${element.name}`, element: element }); _%>
+<%- include('_drupal_elements', { pageName: `${metaData.projectShorthand}-dataElement-${element.namespace}-${element.name}`, element: element, dataElements: dataElements }); _%>
 
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="topNav">
@@ -53,7 +53,7 @@
         <% } %>
         <dd>
         <% if (element.namespace == "ecqm.dataelement") { %>
-          <%- include('./tables/dataElementDescription', { description: element.description }) -%>
+          <%- include('./tables/dataElementDescription', { description: element.description, valueSet: findValueSet(element, dataElements) }) -%>
         <% } else { %>
           <div class="block"><%- makeHtml(element.description) %></div>
         <% } %>

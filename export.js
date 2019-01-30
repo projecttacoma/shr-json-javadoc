@@ -95,6 +95,39 @@ function cleanConstraints(constraints) {
   return constraints.replace(firstWordRegex, 'Constrained');
 }
 
+/**
+ * findValueSet finds the valueset information needed to build the Constraint string (if it doesn't already exist)
+ * @param {Object} element the element to extract the vs information from
+ * @param {Object} allElements a map of all the DERep elements from which to extract subjects (if needed)
+ * @returns {Object} a map of OID, URL and title to be used to build the VS constraint string
+ */
+function findValueSet(element, allElements) {
+
+  // First, the element needs to have the "overridden" category
+  if (element && element.overridden) {
+    const vs = element.overridden.find(o => o.name === 'Value Set');
+
+    // If a value set override exists, generate the title/url/OID based on that
+    if (vs) {
+      const vsUrl = vs.value.replace(/ \(REQUIRED\)/, '');
+      const vsOid = vs.value.match(/\/([\d.]+)\//)[1];
+      const title = vs.override.replace(element.hierarchy[element.hierarchy.length - 1 ].name, '');
+      const ret = { url: vsUrl, oid: vsOid, title: title };
+      return ret;
+
+      // If a value set override doesn't exist, check to see if the "Subject value is type <x>" is set.
+      // If it is, search allElements for the subject element, and get the valueset info from that recursively
+    } else {
+      const subject = element.fields.find(f => f.fqn == 'shr.base.Subject');
+      if (subject && allElements) {
+        const newElem = allElements[`ecqm.dataelement.${subject.pConstraints[0].value}`];
+        return findValueSet(newElem);
+      }
+    }
+  }
+  return null;
+}
+
 function makeHtml(md) {
   // First we need to escape < and >
   if (md != null) {
@@ -202,7 +235,7 @@ function hasMoreThan0Fields(element) {
 // Function to generate and write html from an ejs template
 function renderEjsFile(template, pkg, outDirectory, filePath) {
   const destination = path.join(outDirectory, filePath);
-  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, fieldSort: fieldSort, hasMoreThan0Fields: hasMoreThan0Fields, cleanConstraints: cleanConstraints, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
+  ejs.renderFile(path.join(__dirname, template), Object.assign(pkg, { makeHtml: makeHtml, makeSummaryHtml: makeSummaryHtml, attachment: filePath, titleize: titleize, fieldSort: fieldSort, hasMoreThan0Fields: hasMoreThan0Fields, cleanConstraints: cleanConstraints, findValueSet: findValueSet, drupalVars: { exportTime: exportTime, exportVersion: exportVersion, idFor: idFor } }), (error, htmlText) => {
     if (error) logger.error('Error rendering model doc: %s', error);
     else fs.writeFileSync(destination, htmlText);
   });

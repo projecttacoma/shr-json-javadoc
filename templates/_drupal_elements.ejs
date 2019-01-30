@@ -5,7 +5,7 @@
   <% if (locals.element) { -%>
     <div>
       <% if (element.namespace == "ecqm.dataelement") { %>
-      <%- include('./tables/dataElementDescription', { description: element.description }) -%>
+      <%- include('./tables/dataElementDescription', { description: element.description, valueSet: findValueSet(element, dataElements) }) -%>
       <% } else { -%>
       <div class="block">
         <%- makeHtml(element.description) -%>
