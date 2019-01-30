@@ -190,6 +190,12 @@ function backupTitleize(str) {
   newStr = newStr.replace('Admissionor', 'Admission or');
   newStr = newStr.replace('Stayor', 'Stay or');
   newStr = newStr.replace('TPA', 't-PA');
+  newStr = newStr.replace('Diagnosisof', 'Diagnosis of');
+  newStr = newStr.replace('Prioror', 'Prior or');
+  newStr = newStr.replace('Faceto', 'Face to');
+  newStr = newStr.replace('Vte', 'VTE');
+  newStr = newStr.replace('factor Xa', 'Factor Xa');
+  newStr = newStr.replace('Administeredon', 'Administered on');
   
   return newStr.replace(/([A-Za-z])(\d+)/g, '$1 $2');
 }
