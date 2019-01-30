@@ -213,8 +213,8 @@ function titleize(str) {
 
 // Function for sorting field arrays, so they show up alphabetically by name
 function fieldSort(a, b) {
-  let newA = 'name' in a ? a.name : '';
-  let newB = 'name' in b ? b.name : '';
+  let newA = 'name' in a ? titleize(a.name) : '';
+  let newB = 'name' in b ? titleize(b.name) : '';
   return newA.localeCompare(newB);
 }
 

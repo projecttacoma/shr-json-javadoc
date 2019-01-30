@@ -107,7 +107,7 @@
         <dd>
           <ul class="class_list">
             <% var usedBy = Array.from(nonUnions);
-               usedBy.sort((a, b) => { return a.name.localeCompare(b.name) });
+               usedBy.sort((a, b) => { return titleize(a.name).localeCompare(titleize(b.name)) });
                usedBy.forEach(function(child, i) { -%>
               <li>
                 <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (usedBy.length - 1)) { %>&nbsp;<% } -%>
@@ -121,7 +121,7 @@
           <dt>Included in Unions:</dt>
           <dd>
             <ul class="class_list">
-              <% unions.sort((a, b) => { return a.name.localeCompare(b.name) });
+              <% unions.sort((a, b) => { return titleize(a.name).localeCompare(titleize(b.name)) });
                  unions.forEach(function(child, i) { -%>
                 <li>
                   <a href="../<%= child.path %>/<%= child.name %>.html"><%= titleize(child.name) -%></a><% if (i < (unions.length - 1)) { %>,&nbsp;<% } -%>
