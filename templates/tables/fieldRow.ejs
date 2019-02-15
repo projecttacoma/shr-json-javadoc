@@ -1,6 +1,6 @@
 <div class="data-element">
   <div class="de-definition">
-    <div>
+    <div class="de-title">
     <% if ('title' in field) { %>
       <%= titleize(field.title) %>
     <% } else { %>
@@ -11,7 +11,11 @@
     <% if (field.path == 'ecqm-dataelement') { %>
       <div><%- include('./dataElementDescription', { description: field.description, valueSet: findValueSet(dataElements[field.fqn], dataElements) }) -%></div>
       <% basedOn = dataElements[dataElements[field.fqn].basedOn[0]] %>
-      <div><b>QDM Datatype - <%= titleize(basedOn.name) %>:</b> <%= basedOn.description %></div>
+      <% if (basedOn.namespace == "qdm.attribute" ) { %>
+        <div><b>QDM Attribute - <%= titleize(basedOn.name) %>:</b> <%= basedOn.description %></div>
+      <% } else { %>
+        <div><b>QDM Datatype - <%= titleize(basedOn.name) %>:</b> <%= basedOn.description %></div>
+      <% } %>
     <% } else { %>
       <div><%- makeHtml(field.description) %></div>
     <% } %>
